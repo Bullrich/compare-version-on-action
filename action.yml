@@ -1,0 +1,37 @@
+name: 'compare-version-on-action'
+description: 'Compare a version number against the image version in the action.yml file'
+inputs:
+  version:
+    description: 'Version against which to verify'
+    required: true
+outputs:
+  version:
+    description: "If version matches, the version number"
+    value: ${{ steps.verification.outputs.VERSION }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3.3.0
+    - name: Extract action.yml version
+      uses: mikefarah/yq@master
+      id: action_image
+      with:
+        cmd: yq '.runs.image' 'action.yml'
+    - name: Parse action.yml version
+      shell: bash
+      id: action_version
+      run: |
+        echo "IMAGE_VERSION=$(echo $IMAGE_URL | cut -d: -f3)" >> $GITHUB_OUTPUT
+      env:
+        IMAGE_URL: ${{ steps.action_image.outputs.result }}
+    - name: Compare versions
+      id: verification
+      if: steps.action_version.outputs.IMAGE_VERSION != 'Dockerfile'
+      shell: bash
+      run: |
+        echo "Verifying that $IMAGE_VERSION from action.yml is the same as $PACKAGE_VERSION from package.json"
+        [[ $IMAGE_VERSION == $PACKAGE_VERSION ]]
+        echo VERSION="v$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+      env:
+        IMAGE_VERSION: ${{ steps.action_version.outputs.IMAGE_VERSION }}
+        PACKAGE_VERSION: ${{ inputs.version }}
