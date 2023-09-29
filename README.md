@@ -3,8 +3,9 @@
 Action to compare the docker image version inside a `action.yml` file. Intended to be used in other GitHub actions’ as a check.
 
 ## Installation
-You need to add a step to your GitHub action to use this step:
+You need to have actions/checkout in your job and then add a step to your GitHub action to use this step:
 ```yaml
+- uses: actions/checkout@v3.3.0
 - name: Compare versions
   id: comparison
   uses: Bullrich/compare-version-on-action@main
