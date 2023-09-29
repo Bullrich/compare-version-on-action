@@ -1,5 +1,9 @@
 name: 'compare-version-on-action'
 description: 'Compare a version number against the image version in the action.yml file'
+author: Bullrich
+branding:
+  icon: eye
+  color: purple
 inputs:
   version:
     description: 'Version against which to verify'
