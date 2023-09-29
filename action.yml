@@ -31,7 +31,7 @@ runs:
       run: |
         echo "Verifying that $IMAGE_VERSION from action.yml is the same as $PACKAGE_VERSION from package.json"
         [[ $IMAGE_VERSION == $PACKAGE_VERSION ]]
-        echo VERSION="v$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+        echo VERSION="$PACKAGE_VERSION" >> $GITHUB_OUTPUT
       env:
         IMAGE_VERSION: ${{ steps.action_version.outputs.IMAGE_VERSION }}
         PACKAGE_VERSION: ${{ inputs.version }}
